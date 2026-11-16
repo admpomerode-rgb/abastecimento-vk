@@ -12,43 +12,71 @@
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="manifest" href="manifest.json">
 <style>
-:root{--bg:#f1f5f9;--card:#fff;--tx:#0f172a;--soft:#64748b;--bd:#cbd5e1;--ac:#2563eb;--ac-tx:#fff;--ok:#16a34a;--warn:#d97706;--bad:#dc2626;}
-@media (prefers-color-scheme:dark){:root{--bg:#0b1220;--card:#172033;--tx:#f1f5f9;--soft:#94a3b8;--bd:#334155;--ac:#3b82f6;--ok:#22c55e;--warn:#f59e0b;--bad:#f87171;}}
+:root{--bg:#eaf1f3;--card:#fff;--tx:#0b1f2a;--soft:#5b6b76;--bd:#d3dee4;--ac:#0f6b47;--ac2:#0a3350;--mint:#7eebbe;--ac-tx:#fff;--ok:#15803d;--warn:#b45309;--bad:#dc2626;--grad:linear-gradient(135deg,#2b6b5d 0%,#0a3350 100%);--sombra:0 10px 28px -14px rgba(10,51,80,.45);--campo:#f5f9fa}
+@media (prefers-color-scheme:dark){:root{--bg:#06131b;--card:#0e2230;--tx:#eaf3f7;--soft:#93abb9;--bd:#1f3b4d;--ok:#34d399;--warn:#fbbf24;--bad:#f87171;--sombra:0 10px 28px -14px rgba(0,0,0,.7);--campo:#0a1b27}}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:18px}
-body{padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+html,body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:17px}
+body{padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);background:var(--bg) radial-gradient(circle at 100% 0%,rgba(43,107,93,.14),transparent 45%) fixed}
 .wrap{max-width:520px;margin:0 auto;padding:14px 14px 40px}
-h1{font-size:22px;margin:6px 0 2px} .sub{color:var(--soft);font-size:14px;margin-bottom:12px}
-.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:14px;margin-bottom:12px}
-label{display:block;font-size:14px;color:var(--soft);margin:12px 0 4px;font-weight:600}
-input,select{width:100%;font-size:24px;padding:14px 12px;border-radius:12px;border:2px solid var(--bd);background:var(--bg);color:var(--tx);min-height:58px}
-input:focus,select:focus{outline:none;border-color:var(--ac)}
-.btn{display:block;width:100%;min-height:62px;font-size:20px;font-weight:700;border-radius:14px;border:0;background:var(--ac);color:var(--ac-tx);margin-top:12px;cursor:pointer}
-.btn.sec{background:transparent;color:var(--ac);border:2px solid var(--ac)}
+h1{font-size:24px;margin:0;letter-spacing:-.01em}
+.sub{color:var(--soft);font-size:14px}
+.topo{display:flex;align-items:center;gap:12px;margin:4px 2px 16px}
+.topo img{width:48px;height:48px;border-radius:13px;box-shadow:var(--sombra)}
+.topo .sub{margin-top:2px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:var(--sombra)}
+.card h3{margin:0 0 6px;font-size:15px;letter-spacing:.02em}
+label{display:block;font-size:12.5px;color:var(--soft);margin:14px 0 6px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+input,select{width:100%;font-size:22px;padding:12px 14px;border-radius:14px;border:2px solid var(--bd);background:var(--campo);color:var(--tx);min-height:56px;font-family:inherit}
+input:focus,select:focus{outline:none;border-color:var(--ac);box-shadow:0 0 0 4px rgba(15,107,71,.16)}
+.pre{position:relative}
+.pre b{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:20px;color:var(--soft);font-weight:700;pointer-events:none}
+.pre input{padding-left:56px;font-size:30px;font-weight:700;min-height:68px;font-family:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace}
+.btn{display:block;width:100%;min-height:62px;font-size:19px;font-weight:800;border-radius:16px;border:0;background:var(--grad);color:#fff;margin-top:16px;cursor:pointer;box-shadow:0 10px 22px -10px rgba(10,51,80,.7);letter-spacing:.01em}
+.btn:active{transform:scale(.985)}
+.btn.sec{background:transparent;color:var(--tx);border:2px solid var(--bd);box-shadow:none}
 .btn.ruim{background:var(--bad)}
 .btn:disabled{opacity:.5}
-.veic{display:flex;justify-content:space-between;align-items:center;width:100%;text-align:left;background:var(--card);border:2px solid var(--bd);border-radius:16px;padding:16px;margin-bottom:10px;color:var(--tx);font-size:20px;font-weight:700;min-height:74px;cursor:pointer}
-.veic small{display:block;font-weight:400;color:var(--soft);font-size:14px;margin-top:3px}
-.faixa{background:var(--ac);color:#fff;border-radius:14px;padding:12px 14px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
-.faixa b{font-size:21px} .faixa button{background:rgba(255,255,255,.2);color:#fff;border:0;border-radius:10px;padding:10px 12px;font-size:15px;font-weight:700}
+.veic{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:14px;margin-bottom:12px;color:var(--tx);font-size:19px;font-weight:700;min-height:84px;cursor:pointer;box-shadow:var(--sombra)}
+.veic:active{transform:scale(.985)}
+.veic .ic{width:54px;height:54px;border-radius:16px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0}
+.veic .tx{flex:1;min-width:0}
+.veic small{display:block;font-weight:500;color:var(--soft);font-size:13.5px;margin-top:4px}
+.veic .seta{font-size:26px;color:var(--soft)}
+.placa{white-space:nowrap;font-family:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;font-weight:700;letter-spacing:.06em;border:1px solid var(--bd);background:var(--campo);border-radius:6px;padding:0 6px;font-size:12.5px;margin-right:6px}
+.faixa{background:var(--grad);color:#fff;border-radius:22px;padding:16px;margin-bottom:14px;display:flex;gap:14px;align-items:center;box-shadow:var(--sombra);position:relative;overflow:hidden}
+.faixa::after{content:'';position:absolute;right:-30px;top:-50px;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.07)}
+.faixa .ic{width:52px;height:52px;border-radius:15px;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;font-size:27px;flex-shrink:0;z-index:1}
+.faixa .tx{flex:1;min-width:0;z-index:1}
+.faixa .peq{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;opacity:.75}
+.faixa b{font-size:21px;display:block;margin-top:1px}
+.faixa .info{font-size:13px;opacity:.85;margin-top:3px}
+.faixa .placa{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.3);color:#fff}
+.faixa button{background:#fff;color:#0a3350;border:0;border-radius:999px;padding:10px 16px;font-size:14px;font-weight:800;z-index:1;cursor:pointer}
 .row{display:flex;gap:10px} .row>div{flex:1;min-width:0}
-.calc{font-size:15px;color:var(--soft);margin-top:6px}
-.sw{display:flex;align-items:center;justify-content:space-between;background:var(--bg);border:2px solid var(--bd);border-radius:12px;padding:12px;min-height:58px;margin-top:6px;cursor:pointer}
-.sw .bola{width:52px;height:30px;border-radius:99px;background:var(--bd);position:relative;transition:.15s} .sw .bola::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:.15s} .sw.on .bola{background:var(--ok)} .sw.on .bola::after{left:25px}
-.hist{border-top:1px solid var(--bd);padding:10px 0;font-size:15px;display:flex;justify-content:space-between;gap:8px}
-.tag{font-size:12px;font-weight:700;border-radius:99px;padding:3px 9px;border:1px solid;white-space:nowrap;align-self:flex-start}
-.t-novo{color:var(--warn)} .t-importado{color:var(--ok)} .t-erro,.t-sem_conta{color:var(--bad)}
-.off{background:var(--warn);color:#000;border-radius:10px;padding:8px 12px;font-size:14px;margin-bottom:10px;font-weight:600}
-#modal{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;padding:18px;z-index:50}
-#modal.on{display:flex} #modal .box{background:var(--card);border-radius:18px;padding:20px;max-width:440px;width:100%;border:3px solid var(--warn)}
-#modal.erro .box{border-color:var(--bad)} #modal.ok .box{border-color:var(--ok)}
-#modal h2{margin:0 0 8px;font-size:22px} #modal p{font-size:18px;line-height:1.4;margin:6px 0 4px;white-space:pre-line}
-.min{font-size:14px;color:var(--soft);text-align:center;margin-top:16px}
+.calc{margin-top:10px;font-size:14.5px;font-weight:700;color:var(--ok);background:rgba(21,128,61,.1);border-radius:10px;padding:8px 12px;display:none}
+.calc:not(:empty){display:block}
+.sw{display:flex;align-items:center;justify-content:space-between;background:var(--campo);border:2px solid var(--bd);border-radius:14px;padding:12px 14px;min-height:58px;margin-top:14px;cursor:pointer;font-weight:700}
+.sw .bola{width:54px;height:32px;border-radius:99px;background:var(--bd);position:relative;transition:.15s} .sw .bola::after{content:"";position:absolute;top:3px;left:3px;width:26px;height:26px;border-radius:50%;background:#fff;transition:.15s;box-shadow:0 1px 3px rgba(0,0,0,.3)} .sw.on .bola{background:var(--ok)} .sw.on .bola::after{left:25px}
+.hist{border-top:1px solid var(--bd);padding:12px 0;font-size:15px;display:flex;justify-content:space-between;gap:10px}
+.hist:first-of-type{border-top:0}
+.hist b.dt{font-size:15px}
+.tag{font-size:11.5px;font-weight:800;border-radius:99px;padding:4px 10px;white-space:nowrap;display:inline-block}
+.t-novo{color:var(--warn);background:rgba(217,119,6,.14)} .t-importado{color:var(--ok);background:rgba(21,128,61,.14)} .t-erro,.t-sem_conta{color:var(--bad);background:rgba(220,38,38,.12)}
+.off{background:#fde68a;color:#451a03;border-radius:14px;padding:10px 14px;font-size:14px;margin-bottom:12px;font-weight:700}
+#modal{position:fixed;inset:0;background:rgba(3,14,21,.72);display:none;align-items:center;justify-content:center;padding:18px;z-index:50;backdrop-filter:blur(3px)}
+#modal.on{display:flex} #modal .box{background:var(--card);border-radius:24px;padding:22px;max-width:440px;width:100%;border-top:8px solid var(--warn);box-shadow:0 24px 60px -20px rgba(0,0,0,.6)}
+#modal.erro .box{border-top-color:var(--bad)} #modal.ok .box{border-top-color:var(--ok)}
+#modal .ico{font-size:34px;line-height:1;margin-bottom:6px}
+#modal h2{margin:0 0 8px;font-size:22px} #modal p{font-size:17.5px;line-height:1.45;margin:6px 0 4px;white-space:pre-line}
+.min{font-size:13.5px;color:var(--soft);text-align:center;margin-top:18px}
+.min a{color:var(--soft)}
+.vazio{text-align:center;padding:26px 14px;color:var(--soft);font-size:15px;line-height:1.5}
+.vazio .big{font-size:40px;display:block;margin-bottom:8px}
 </style>
 </head>
 <body>
 <div class="wrap" id="app"></div>
-<div id="modal"><div class="box"><h2 id="mTit"></h2><p id="mTxt"></p><div id="mBtns"></div></div></div>
+<div id="modal"><div class="box"><div class="ico" id="mIco"></div><h2 id="mTit"></h2><p id="mTxt"></p><div id="mBtns"></div></div></div>
 
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
@@ -72,7 +100,7 @@ const LS = { get:k=>{ try{return localStorage.getItem(k);}catch(e){return null;}
 /* ---------- avisos grandes (nunca toast pequeno) ---------- */
 function aviso({titulo,texto,tipo,botoes}){
   return new Promise(res=>{
-    const m=$('#modal'); m.className='on '+(tipo||''); $('#mTit').textContent=titulo||''; $('#mTxt').textContent=texto||'';
+    const m=$('#modal'); m.className='on '+(tipo||''); $('#mIco').textContent=({erro:'⛔',ok:'✅'}[tipo]||'⚠️'); $('#mTit').textContent=titulo||''; $('#mTxt').textContent=texto||'';
     const b=$('#mBtns'); b.innerHTML='';
     (botoes||[{t:'OK',v:true}]).forEach(x=>{ const e=document.createElement('button'); e.className='btn '+(x.cls||''); e.textContent=x.t; e.onclick=()=>{ m.className=''; res(x.v); }; b.appendChild(e); });
   });
@@ -102,29 +130,31 @@ function desenhar(){
   if(document.getElementById('fValor') && ['fValor','fLitros','fKm'].some(i=>document.getElementById(i).value) && veiculo && !desenhar.forcar) return;   // não apaga o que você está digitando
   const aviso_off = offline ? '<div class="off">📵 Sem sinal. Pode registrar: fica guardado no aparelho e é enviado quando o sinal voltar.</div>' : '';
   if(!usuario){
-    app.innerHTML = `<h1>⛽ Abastecimento VK</h1><div class="sub">Entre com o mesmo e-mail e senha do Livro Caixa</div>${aviso_off}<div class="card"><label>E-mail</label><input id="lEmail" type="email" autocomplete="username" inputmode="email"><label>Senha</label><input id="lSenha" type="password" autocomplete="current-password"><button class="btn" id="bEntrar">Entrar</button></div>`;
+    app.innerHTML = `<div class="topo"><img src="icon-192.png" alt=""><div><h1>Abastecimento VK</h1><div class="sub">Registro rápido no carro</div></div></div>${aviso_off}<div class="card"><h3>Entrar</h3><div class="sub">Use o mesmo e-mail e senha do Livro Caixa.</div><label>E-mail</label><input id="lEmail" type="email" autocomplete="username" inputmode="email"><label>Senha</label><input id="lSenha" type="password" autocomplete="current-password"><button class="btn" id="bEntrar">Entrar</button></div>`;
     $('#bEntrar').onclick=entrar; $('#lSenha').onkeydown=e=>{ if(e.key==='Enter') entrar(); }; return;
   }
   if(!veiculo){
-    app.innerHTML = `<h1>⛽ Qual carro?</h1><div class="sub">Toque no veículo que você vai abastecer</div>${aviso_off}${veiculos.length?veiculos.map(v=>`<button class="veic" data-v="${esc(v.id)}"><span>${esc(v.nome)}<small>${esc(v.placa||'sem placa')} · último km ${(v.kmAtual||0).toLocaleString('pt-BR')}</small></span><span>›</span></button>`).join(''):'<div class="card">Nenhum veículo disponível ainda. Abra o Livro Caixa uma vez (ele envia a lista de veículos para cá) e volte.</div>'}<div class="min"><a href="#" id="bSair">Sair da conta (${esc(usuario.email)})</a></div>`;
+    const icoV = v=>/moto|cg|biz|xre|titan|fan|pop|bros|fazer|factor|lander|tenere/i.test((v.nome||'')+' '+(v.modelo||''))?'🏍️':'🚗';
+    app.innerHTML = `<div class="topo"><img src="icon-192.png" alt=""><div><h1>Qual veículo?</h1><div class="sub">Toque no que você vai abastecer</div></div></div>${aviso_off}${veiculos.length?veiculos.map(v=>`<button class="veic" data-v="${esc(v.id)}"><span class="ic">${icoV(v)}</span><span class="tx">${esc(v.nome)}<small><span class="placa">${esc(v.placa||'sem placa')}</span>último km ${(v.kmAtual||0).toLocaleString('pt-BR')}</small></span><span class="seta">›</span></button>`).join(''):'<div class="card vazio"><span class="big">📡</span>Nenhum veículo disponível ainda.<br>Abra o Livro Caixa uma vez (ele envia a lista de veículos para cá) e volte.</div>'}<div class="min"><a href="#" id="bSair">Sair da conta (${esc(usuario.email)})</a></div>`;
     app.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{ veiculo=veiculos.find(x=>x.id===b.dataset.v); LS.set('veiculoId',veiculo.id); desenhar(); });
     $('#bSair').onclick=e=>{ e.preventDefault(); sair(); }; return;
   }
   const v=veiculo; const combs=(v.combustiveis&&v.combustiveis.length)?v.combustiveis:['Gasolina comum','Etanol','Diesel S10'];
   const comb0=LS.get('comb_'+v.id)||v.ultimoCombustivel||combs[0]; const posto0=LS.get('posto_'+v.id)||v.ultimoPosto||'';
-  app.innerHTML = `${aviso_off}<div class="faixa"><div><div style="font-size:13px;opacity:.85">Abastecendo</div><b>${esc(v.nome)}</b> <span style="opacity:.85">${esc(v.placa||'')}</span></div><button id="bTroca">Trocar</button></div>
+  const icoV2 = /moto|cg|biz|xre|titan|fan|pop|bros|fazer|factor|lander|tenere/i.test((v.nome||'')+' '+(v.modelo||''))?'🏍️':'🚗';
+  app.innerHTML = `${aviso_off}<div class="faixa"><div class="ic">${icoV2}</div><div class="tx"><div class="peq">Abastecendo</div><b>${esc(v.nome)}</b><div class="info">${v.placa?`<span class="placa">${esc(v.placa)}</span>`:''}<span style="white-space:nowrap">último km ${(v.kmAtual||0).toLocaleString('pt-BR')}</span></div></div><button id="bTroca">Trocar</button></div>
   <div class="card">
-    <label>Valor pago (R$)</label><input id="fValor" inputmode="decimal" placeholder="0,00" autocomplete="off">
+    <label style="margin-top:0">Valor pago</label><div class="pre"><b>R$</b><input id="fValor" inputmode="decimal" placeholder="0,00" autocomplete="off"></div>
     <div class="row"><div><label>Litros</label><input id="fLitros" inputmode="decimal" placeholder="0,00" autocomplete="off"></div><div><label>Preço do litro</label><input id="fPreco" inputmode="decimal" placeholder="auto" autocomplete="off"></div></div>
     <div class="calc" id="fCalc"></div>
-    <label>Km do painel agora <span style="font-weight:400">(último: ${(v.kmAtual||0).toLocaleString('pt-BR')})</span></label><input id="fKm" inputmode="numeric" placeholder="${(v.kmAtual||0)||''}" autocomplete="off">
+    <label>Km do painel agora</label><input id="fKm" inputmode="numeric" placeholder="${(v.kmAtual||0)||''}" autocomplete="off">
     <label>Combustível</label><select id="fComb">${combs.map(c=>`<option ${c===comb0?'selected':''}>${esc(c)}</option>`).join('')}</select>
     <label>Posto</label><input id="fPosto" list="dlPostos" value="${esc(posto0)}" autocomplete="off" placeholder="nome do posto"><datalist id="dlPostos">${(v.postos||[]).map(p=>`<option value="${esc(p)}">`).join('')}</datalist>
-    <div class="sw on" id="fCheio"><span>Encheu o tanque?</span><span class="bola"></span></div>
+    <div class="sw on" id="fCheio"><span>⛽ Encheu o tanque?</span><span class="bola"></span></div>
     <label>Data</label><input id="fData" type="date" value="${hoje()}" max="${hoje()}">
     <button class="btn" id="bSalvar">✔ Registrar abastecimento</button>
   </div>
-  <div class="card"><b>Meus últimos registros</b>${meus.length?meus.map(m=>`<div class="hist"><span>${dataBR(m.data)} · ${esc(m.veiculoNome||'')}<br><small style="color:var(--soft)">${brl(m.valor)} · ${(m.litros||0).toLocaleString('pt-BR')} L · ${(m.km||0).toLocaleString('pt-BR')} km</small>${m.erro?`<br><small style="color:var(--bad)">${esc(m.erro)}</small>`:''}</span><span style="text-align:right"><span class="tag t-${m.status}">${m.pendente?'Guardado no aparelho':({novo:'Enviado',importado:'No financeiro ✓',erro:'Precisa revisar',sem_conta:'Aguardando o financeiro'}[m.status]||m.status)}</span>${m.status==='novo'?`<br><a href="#" data-del="${esc(m.id)}" style="font-size:13px;color:var(--bad)">apagar</a>`:''}</span></div>`).join(''):'<div class="sub" style="margin-top:8px">Nada ainda.</div>'}</div>
+  <div class="card"><h3>🕘 Meus últimos registros</h3>${meus.length?meus.map(m=>`<div class="hist"><span><b class="dt">${dataBR(m.data)}</b> · ${esc(m.veiculoNome||'')}<br><small style="color:var(--soft)">${brl(m.valor)} · ${(m.litros||0).toLocaleString('pt-BR')} L · ${(m.km||0).toLocaleString('pt-BR')} km</small>${m.erro?`<br><small style="color:var(--bad)">${esc(m.erro)}</small>`:''}</span><span style="text-align:right"><span class="tag t-${m.status}">${m.pendente?'Guardado no aparelho':({novo:'Enviado',importado:'No financeiro ✓',erro:'Precisa revisar',sem_conta:'Aguardando o financeiro'}[m.status]||m.status)}</span>${m.status==='novo'?`<br><a href="#" data-del="${esc(m.id)}" style="font-size:13px;color:var(--bad);display:inline-block;margin-top:6px">apagar</a>`:''}</span></div>`).join(''):'<div class="vazio"><span class="big">⛽</span>Nenhum registro ainda.<br>O primeiro vai aparecer aqui.</div>'}</div>
   <div class="min"><a href="#" id="bSair">Sair da conta (${esc(usuario.email)})</a></div>`;
   $('#bTroca').onclick=()=>{ veiculo=null; LS.set('veiculoId',''); desenhar.forcar=true; desenhar(); desenhar.forcar=false; };
   $('#bSair').onclick=e=>{ e.preventDefault(); sair(); };
