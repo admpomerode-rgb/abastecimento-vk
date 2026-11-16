@@ -28,7 +28,7 @@ h1{font-size:24px;margin:0;letter-spacing:-.01em}
 label{display:block;font-size:12.5px;color:var(--soft);margin:14px 0 6px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
 input,select{width:100%;font-size:22px;padding:12px 14px;border-radius:14px;border:2px solid var(--bd);background:var(--campo);color:var(--tx);min-height:56px;font-family:inherit}
 input:focus,select:focus{outline:none;border-color:var(--ac);box-shadow:0 0 0 4px rgba(15,107,71,.16)}
-.pre{position:relative}
+.pre,.pw{position:relative}
 .pre b{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:20px;color:var(--soft);font-weight:700;pointer-events:none}
 .pre input{padding-left:56px;font-size:30px;font-weight:700;min-height:68px;font-family:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace}
 .btn{display:block;width:100%;min-height:62px;font-size:19px;font-weight:800;border-radius:16px;border:0;background:var(--grad);color:#fff;margin-top:16px;cursor:pointer;box-shadow:0 10px 22px -10px rgba(10,51,80,.7);letter-spacing:.01em}
@@ -127,15 +127,18 @@ const formAberto = ()=>false;
 /* ---------- telas ---------- */
 function desenhar(){
   const app=$('#app'); if(!app) return;
+  { const le=document.getElementById('lEmail'), ls=document.getElementById('lSenha');   // tela de login aberta: não apaga o que você está digitando
+    if(le && ls && !usuario && !desenhar.forcar && (le.value || ls.value || document.activeElement===le || document.activeElement===ls)) return; }
   if(document.getElementById('fValor') && ['fValor','fLitros','fKm'].some(i=>document.getElementById(i).value) && veiculo && !desenhar.forcar) return;   // não apaga o que você está digitando
   const aviso_off = offline ? '<div class="off">📵 Sem sinal. Pode registrar: fica guardado no aparelho e é enviado quando o sinal voltar.</div>' : '';
   if(!usuario){
-    app.innerHTML = `<div class="topo"><img src="icon-192.png" alt=""><div><h1>Abastecimento VK</h1><div class="sub">Registro rápido no carro</div></div></div>${aviso_off}<div class="card"><h3>Entrar</h3><div class="sub">Use o mesmo e-mail e senha do Livro Caixa.</div><label>E-mail</label><input id="lEmail" type="email" autocomplete="username" inputmode="email"><label>Senha</label><input id="lSenha" type="password" autocomplete="current-password"><button class="btn" id="bEntrar">Entrar</button></div>`;
+    app.innerHTML = `<div class="topo"><img src="icon-192.png" alt=""><div><h1>Abastecimento VK</h1><div class="sub">Registro rápido no carro</div></div></div>${aviso_off}<div class="card"><h3>Entrar</h3><div class="sub">Use o mesmo e-mail e senha do Livro Caixa.</div><label>E-mail</label><input id="lEmail" type="email" autocomplete="username" inputmode="email"><label>Senha</label><div class="pw"><input id="lSenha" type="password" autocomplete="current-password" style="padding-right:64px"><button type="button" id="bOlho" aria-label="Mostrar senha" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:transparent;font-size:24px;padding:8px;cursor:pointer">👁️</button></div><button class="btn" id="bEntrar">Entrar</button></div>`;
+    $('#bOlho').onclick=()=>{ const i=$('#lSenha'), ver=i.type==='password'; i.type=ver?'text':'password'; $('#bOlho').textContent=ver?'🙈':'👁️'; $('#bOlho').setAttribute('aria-label',ver?'Esconder senha':'Mostrar senha'); i.focus(); };
     $('#bEntrar').onclick=entrar; $('#lSenha').onkeydown=e=>{ if(e.key==='Enter') entrar(); }; return;
   }
   if(!veiculo){
     const icoV = v=>/moto|cg|biz|xre|titan|fan|pop|bros|fazer|factor|lander|tenere/i.test((v.nome||'')+' '+(v.modelo||''))?'🏍️':'🚗';
-    app.innerHTML = `<div class="topo"><img src="icon-192.png" alt=""><div><h1>Qual veículo?</h1><div class="sub">Toque no que você vai abastecer</div></div></div>${aviso_off}${veiculos.length?veiculos.map(v=>`<button class="veic" data-v="${esc(v.id)}"><span class="ic">${icoV(v)}</span><span class="tx">${esc(v.nome)}<small><span class="placa">${esc(v.placa||'sem placa')}</span>último km ${(v.kmAtual||0).toLocaleString('pt-BR')}</small></span><span class="seta">›</span></button>`).join(''):'<div class="card vazio"><span class="big">📡</span>Nenhum veículo disponível ainda.<br>Abra o Livro Caixa uma vez (ele envia a lista de veículos para cá) e volte.</div>'}<div class="min"><a href="#" id="bSair">Sair da conta (${esc(usuario.email)})</a></div>`;
+    app.innerHTML = `<div class="topo"><img src="icon-192.png" alt=""><div><h1>Qual veículo?</h1><div class="sub">Toque no que você vai abastecer</div></div></div>${aviso_off}${veiculos.length?veiculos.map(v=>`<button class="veic" data-v="${esc(v.id)}"><span class="ic">${icoV(v)}</span><span class="tx">${esc(v.nome)}<small><span class="placa">${esc(v.placa||'sem placa')}</span>último km ${(v.kmAtual||0).toLocaleString('pt-BR')}</small></span><span class="seta">›</span></button>`).join(''):'<div class="card vazio"><span class="big">📡</span>Nenhum veículo disponível ainda.<br>Abra o Livro Caixa uma vez (ele envia a lista de veículos para cá) e volte.</div>'}<div class="min"><a href="#" id="bSair">Sair da conta</a></div>`;
     app.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{ veiculo=veiculos.find(x=>x.id===b.dataset.v); LS.set('veiculoId',veiculo.id); desenhar(); });
     $('#bSair').onclick=e=>{ e.preventDefault(); sair(); }; return;
   }
@@ -155,7 +158,7 @@ function desenhar(){
     <button class="btn" id="bSalvar">✔ Registrar abastecimento</button>
   </div>
   <div class="card"><h3>🕘 Meus últimos registros</h3>${meus.length?meus.map(m=>`<div class="hist"><span><b class="dt">${dataBR(m.data)}</b> · ${esc(m.veiculoNome||'')}<br><small style="color:var(--soft)">${brl(m.valor)} · ${(m.litros||0).toLocaleString('pt-BR')} L · ${(m.km||0).toLocaleString('pt-BR')} km</small>${m.erro?`<br><small style="color:var(--bad)">${esc(m.erro)}</small>`:''}</span><span style="text-align:right"><span class="tag t-${m.status}">${m.pendente?'Guardado no aparelho':({novo:'Enviado',importado:'No financeiro ✓',erro:'Precisa revisar',sem_conta:'Aguardando o financeiro'}[m.status]||m.status)}</span>${m.status==='novo'?`<br><a href="#" data-del="${esc(m.id)}" style="font-size:13px;color:var(--bad);display:inline-block;margin-top:6px">apagar</a>`:''}</span></div>`).join(''):'<div class="vazio"><span class="big">⛽</span>Nenhum registro ainda.<br>O primeiro vai aparecer aqui.</div>'}</div>
-  <div class="min"><a href="#" id="bSair">Sair da conta (${esc(usuario.email)})</a></div>`;
+  <div class="min"><a href="#" id="bSair">Sair da conta</a></div>`;
   $('#bTroca').onclick=()=>{ veiculo=null; LS.set('veiculoId',''); desenhar.forcar=true; desenhar(); desenhar.forcar=false; };
   $('#bSair').onclick=e=>{ e.preventDefault(); sair(); };
   const cheio=$('#fCheio'); cheio.onclick=()=>cheio.classList.toggle('on');
