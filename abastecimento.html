@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="robots" content="noindex, nofollow, noarchive">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#0a3350">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -84,6 +84,9 @@ input:focus,select:focus{outline:none;border-color:var(--ac);box-shadow:0 0 0 4p
 <script>
 /* Abastecimento VK — app rápido do carro. Grava em "abastecimentos_app" (mesmo Firebase do Livro Caixa);
    o Livro Caixa importa para o módulo Carros e cria o lançamento financeiro. */
+const LIMITE_SEM_USO_MS = 30*24*60*60*1000; // 30 dias sem abrir → pede a senha de novo (mude aqui se quiser)
+function marcarUso(){ try{ localStorage.setItem('abast_ultimo_uso', String(Date.now())); }catch(e){} }
+function usoExpirou(){ try{ const t=Number(localStorage.getItem('abast_ultimo_uso')||0); return t>0 && (Date.now()-t)>LIMITE_SEM_USO_MS; }catch(e){ return false; } }
 const CONFIG = { apiKey:"AIzaSyBbSv3c_UKvhi3Qm0V0Nw3n4bU-sCKaarE", authDomain:"financeiro-livro-caixa.firebaseapp.com", projectId:"financeiro-livro-caixa", storageBucket:"financeiro-livro-caixa.firebasestorage.app", messagingSenderId:"515159506710", appId:"1:515159506710:web:c41985f0febd4a717b5a37" };
 const $ = s=>document.querySelector(s);
 const esc = s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -112,10 +115,12 @@ const confirmar = (t,x,ok='Sim, é isso',nao='Voltar e corrigir')=>aviso({titulo
 function iniciar(){
   if(typeof firebase==='undefined'){ $('#app').innerHTML='<div class="card"><h1>Sem internet</h1><p>Abra o app uma vez com internet para carregar. Depois ele funciona mesmo sem sinal.</p></div>'; return; }
   firebase.initializeApp(CONFIG); auth=firebase.auth(); db=firebase.firestore();
+  try{ auth.setPersistence('local'); }catch(e){}   // login fica salvo no aparelho
+
   db.settings({ experimentalAutoDetectLongPolling:true, cacheSizeBytes:firebase.firestore.CACHE_SIZE_UNLIMITED });
   db.enablePersistence({synchronizeTabs:true}).catch(()=>{});
   window.addEventListener('online',()=>{ offline=false; desenhar(); }); window.addEventListener('offline',()=>{ offline=true; desenhar(); });
-  auth.onAuthStateChanged(u=>{ usuario=u; if(u) assinar(); else { if(unsubV)unsubV(); if(unsubM)unsubM(); veiculos=[]; meus=[]; } desenhar(); });
+  auth.onAuthStateChanged(u=>{ if(u && usoExpirou()){ auth.signOut(); return; } if(u) marcarUso(); usuario=u; if(u) assinar(); else { if(unsubV)unsubV(); if(unsubM)unsubM(); veiculos=[]; meus=[]; } desenhar(); });
 }
 function assinar(){
   if(unsubV) unsubV(); if(unsubM) unsubM();
@@ -132,8 +137,8 @@ function desenhar(){
   if(document.getElementById('fValor') && ['fValor','fLitros','fKm'].some(i=>document.getElementById(i).value) && veiculo && !desenhar.forcar) return;   // não apaga o que você está digitando
   const aviso_off = offline ? '<div class="off">📵 Sem sinal. Pode registrar: fica guardado no aparelho e é enviado quando o sinal voltar.</div>' : '';
   if(!usuario){
-    app.innerHTML = `<div class="topo"><img src="icon-192.png" alt=""><div><h1>Abastecimento VK</h1><div class="sub">Registro rápido no carro</div></div></div>${aviso_off}<div class="card"><h3>Entrar</h3><div class="sub">Use o mesmo e-mail e senha do Livro Caixa.</div><label>E-mail</label><input id="lEmail" type="email" autocomplete="username" inputmode="email"><label>Senha</label><div class="pw"><input id="lSenha" type="text" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" style="padding-right:64px;-webkit-text-security:disc"><button type="button" id="bOlho" aria-label="Mostrar senha" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:transparent;font-size:24px;padding:8px;cursor:pointer">👁️</button></div><button class="btn" id="bEntrar">Entrar</button></div>`;
-    $('#bOlho').onclick=()=>{ const i=$('#lSenha'), ver=i.style.webkitTextSecurity!=='none'; i.style.webkitTextSecurity=ver?'none':'disc'; $('#bOlho').textContent=ver?'🙈':'👁️'; $('#bOlho').setAttribute('aria-label',ver?'Esconder senha':'Mostrar senha'); i.focus(); };
+    app.innerHTML = `<div class="topo"><img src="icon-192.png" alt=""><div><h1>Abastecimento VK</h1><div class="sub">Registro rápido no carro</div></div></div>${aviso_off}<div class="card"><h3>Entrar</h3><div class="sub">Use o mesmo e-mail e senha do Livro Caixa.</div><label>E-mail</label><input id="lEmail" type="email" placeholder="seu@email.com"><label>Senha</label><div class="pw"><input id="lSenha" type="password" placeholder="senha" style="padding-right:64px"><button type="button" id="bOlho" aria-label="Mostrar senha" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:transparent;font-size:24px;padding:8px;cursor:pointer">👁️</button></div><button class="btn" id="bEntrar">Entrar</button></div>`;
+    $('#bOlho').onclick=()=>{ const i=$('#lSenha'), ver=i.type==='password'; i.type=ver?'text':'password'; $('#bOlho').textContent=ver?'🙈':'👁️'; $('#bOlho').setAttribute('aria-label',ver?'Esconder senha':'Mostrar senha'); i.focus(); };
     $('#bEntrar').onclick=entrar; $('#lSenha').onkeydown=e=>{ if(e.key==='Enter') entrar(); }; return;
   }
   if(!veiculo){
@@ -172,7 +177,7 @@ function desenhar(){
 async function entrar(){
   const e=$('#lEmail').value.trim(), s=$('#lSenha').value; if(!e||!s){ await erro('Faltou algo','Digite o e-mail e a senha.'); return; }
   const b=$('#bEntrar'); b.disabled=true; b.textContent='Entrando…';
-  try{ await auth.signInWithEmailAndPassword(e,s); }catch(x){ b.disabled=false; b.textContent='Entrar'; await erro('Não consegui entrar', /network/i.test(x.code||x.message)?'Sem internet. Tente de novo quando tiver sinal.':'E-mail ou senha incorretos.'); }
+  marcarUso(); try{ await auth.signInWithEmailAndPassword(e,s); }catch(x){ b.disabled=false; b.textContent='Entrar'; await erro('Não consegui entrar', /network/i.test(x.code||x.message)?'Sem internet. Tente de novo quando tiver sinal.':'E-mail ou senha incorretos.'); }
 }
 function sair(){ confirmar('Sair da conta?','Você vai precisar entrar de novo.','Sair','Ficar').then(ok=>{ if(ok){ LS.set('veiculoId',''); veiculo=null; auth.signOut(); } }); }
 
